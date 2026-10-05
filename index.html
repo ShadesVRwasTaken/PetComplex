@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Pet Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>🐾 CyberPet Companion</h1>
+        
+        <!-- Stats Dashboard -->
+        <div class="stats-panel">
+            <div class="stat-box">💰 Money: $<span id="money-display">50</span></div>
+            <div class="stat-box">📈 Age: <span id="age-display">0</span> ticks</div>
+        </div>
+
+        <!-- Status Progress Bars -->
+        <div class="vitals-panel">
+            <div class="vital-row">
+                <label>🍖 Food:</label>
+                <div class="progress-bar"><div id="food-bar" class="progress-fill food" style="width: 100%;"></div></div>
+            </div>
+            <div class="vital-row">
+                <label>⚡ Energy:</label>
+                <div class="progress-bar"><div id="energy-bar" class="progress-fill energy" style="width: 100%;"></div></div>
+            </div>
+            <div class="vital-row">
+                <label>❤️ Happiness:</label>
+                <div class="progress-bar"><div id="happiness-bar" class="progress-fill happiness" style="width: 100%;"></div></div>
+            </div>
+        </div>
+
+        <!-- The Pet Render Area -->
+        <div class="pet-display">
+            <div id="pet-avatar" class="pet-avatar">😐</div>
+            <div id="pet-status-text" class="status-text">Your pet is feeling okay.</div>
+        </div>
+
+        <!-- Action Control Dashboard -->
+        <div class="controls-panel">
+            <button onclick="work()" id="btn-work">💼 Work (+💰)</button>
+            <button onclick="feed()" id="btn-feed">🍖 Feed (-$10)</button>
+            <button onclick="play()" id="btn-play">🎾 Play (-15⚡)</button>
+            <button onclick="sleep()" id="btn-sleep">😴 Sleep</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
