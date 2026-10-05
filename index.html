@@ -3,128 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberPet Sandbox Studio</title>
+    <title>CyberPet: Pixel Sandbox</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Load YouTube Iframe Player API -->
+    <script src="https://youtube.com"></script>
 </head>
 <body>
-    <div class="desktop-wrapper">
-        <!-- Main Game Monitor -->
-        <div class="monitor-frame">
-            <header>
-                <h1>🌌 CYBERPET STUDIO v2.0</h1>
-                <div class="top-bar-stats">
-                    <span>💰 $<span id="lbl-money">100</span></span>
-                    <span>⏱️ Age: <span id="lbl-age">0</span>t</span>
+    <!-- Hidden YouTube Video Wrapper managed by the Audio Mixer Engine -->
+    <div id="yt-audio-container" style="position:absolute; top:-9999px; left:-9999px; width:1px; height:1px;"></div>
+
+    <div class="handheld-console">
+        <div class="screen-bevel">
+            <!-- Top Status Matrix -->
+            <div class="lcd-header">
+                <div class="lcd-led" id="status-led"></div>
+                <div class="lcd-stat">CASH: $<span id="lbl-money">100</span></div>
+                <div class="lcd-stat">AGE: <span id="lbl-age">0</span></div>
+            </div>
+
+            <!-- Virtual Sandbox Room Screen -->
+            <canvas id="room-canvas" width="400" height="220" class="pixel-screen"></canvas>
+
+            <!-- Hardware Progress Gauges -->
+            <div class="gauge-cluster">
+                <div class="gauge-node">
+                    <span class="g-lbl">FOOD</span>
+                    <div class="g-track"><div id="bar-food" class="g-fill food"></div></div>
                 </div>
-            </header>
+                <div class="gauge-node">
+                    <span class="g-lbl">ENRG</span>
+                    <div class="g-track"><div id="bar-energy" class="g-fill energy"></div></div>
+                </div>
+                <div class="gauge-node">
+                    <span class="g-lbl">HAPP</span>
+                    <div class="g-track"><div id="bar-happy" class="g-fill happy"></div></div>
+                </div>
+            </div>
+        </div>
 
-            <!-- Virtual Sandbox Room Viewport -->
-            <div class="room-viewport" id="room-canvas-container">
-                <!-- Sandbox Items and Pets are rendered inside dynamically via JavaScript -->
-                <div id="sandbox-pet" class="pixel-pet-sprite"></div>
-            </div>
-
-            <!-- Vitals Grid Dashboard -->
-            <div class="vitals-grid">
-                <div class="vital-node">🍖 Food: <div class="bar-outer"><div id="bar-food" class="bar-inner food"></div></div></div>
-                <div class="vital-node">⚡ Energy: <div class="bar-outer"><div id="bar-energy" class="bar-inner energy"></div></div></div>
-                <div class="vital-node">❤️ Happy: <div class="bar-outer"><div id="bar-happy" class="bar-inner happy"></div></div></div>
-            </div>
-
-            <!-- Global Action Deck -->
-            <div class="action-deck">
-                <button onclick="openMinigameSelector()">💼 Go to Work</button>
-                <button onclick="feedPet()">🍖 Buy Food (-$10)</button>
-                <button onclick="toggleSleep()" id="btn-sleep">😴 Put to Sleep</button>
-                <button onclick="openHomeEditor()">🛋️ Edit Home</button>
-                <button onclick="openPixelEditor()">🎨 Design Pet</button>
-                <button onclick="openSettings()">⚙️ Settings</button>
-            </div>
-            
-            <div class="io-deck">
-                <button onclick="exportPetFile()" class="btn-io">📤 Export .pet</button>
-                <button onclick="document.getElementById('import-trigger').click()" class="btn-io">📥 Import .pet</button>
-                <input type="file" id="import-trigger" style="display:none" onchange="importPetFile(event)">
-            </div>
+        <!-- Primary Hardware Buttons -->
+        <div class="dpad-action-grid">
+            <button class="c-btn" onclick="openMinigameSelector()">💼 WORK</button>
+            <button class="c-btn" onclick="feedPet()">🍖 FEED ($10)</button>
+            <button class="c-btn" id="btn-sleep" onclick="toggleSleep()">😴 SLEEP</button>
+            <button class="c-btn" onclick="openHomeEditor()">🛋️ DECOR</button>
+            <button class="c-btn highlight" onclick="openPixelEditor()">🎨 PAINT</button>
+            <button class="c-btn" onclick="openSettings()">⚙️ SYSTEM</button>
+        </div>
+        
+        <!-- Cartridge Disk Backup Interfaces -->
+        <div class="cartridge-io-deck">
+            <button onclick="exportPetFile()" class="io-btn">📤 EXPORT .PET</button>
+            <button onclick="document.getElementById('import-trigger').click()" class="io-btn">📥 IMPORT .PET</button>
+            <input type="file" id="import-trigger" style="display:none" onchange="importPetFile(event)">
         </div>
     </div>
 
-    <!-- MODAL LAYERS -->
-    <!-- Settings Modal -->
+    <!-- SYSTEM SUB-PANELS (MODALS) -->
+    <!-- Sound Configuration Dashboard -->
     <div id="modal-settings" class="modal hidden">
-        <div class="modal-content">
-            <h3>⚙️ Audio Control Matrix</h3>
+        <div class="modal-box">
+            <h3>⚙️ AUDIO MIXER MATRIX</h3>
             <div class="slider-row">
-                <label>🎵 Lo-Fi Background Music</label>
-                <input type="range" id="vol-music" min="0" max="100" value="30" oninput="adjustMusicVolume(this.value)">
+                <label>🎵 LO-FI YOUTUBE STREAM</label>
+                <input type="range" id="vol-music" min="0" max="100" value="40" oninput="adjustMusicVolume(this.value)">
+                <small style="color:#888; font-size:0.75rem; display:block; margin-top:4px;">Streams live chillhop beats via background API</small>
             </div>
             <div class="slider-row">
-                <label>🔊 Cute Sound Effects</label>
+                <label>🔊 CUTE ARCADE SFX</label>
                 <input type="range" id="vol-sfx" min="0" max="100" value="50" oninput="adjustSFXVolume(this.value)">
             </div>
-            <button onclick="closeModals()">Close Settings</button>
+            <button class="modal-close" onclick="closeModals()">RETURN TO SYSTEM</button>
         </div>
     </div>
 
-    <!-- Pixel Art Editor Modal -->
+    <!-- 16x16 Pixel Designer Matrix -->
     <div id="modal-pixel" class="modal hidden">
-        <div class="modal-content large">
-            <h3>🎨 16x16 Sprite Sheet Designer</h3>
-            <div class="editor-layout">
-                <div class="state-selector-panel">
-                    <label>Editing Frame State:</label>
+        <div class="modal-box large">
+            <h3>🎨 16x16 SPRITE SPRITE SHEET STUDIO</h3>
+            <div class="editor-workspace">
+                <div class="editor-sidebar">
+                    <label>ANIMATION ENGINE STATE:</label>
                     <select id="editor-state-select" onchange="loadStateToPixelCanvas()">
-                        <option value="neutral">😐 Neutral (Standing)</option>
-                        <option value="wandering">🏃 Wandering</option>
-                        <option value="happy">✨ Happy</option>
-                        <option value="sad">😢 Sad</option>
-                        <option value="hungry">🤤 Hungry</option>
-                        <option value="tired">😫 Tired</option>
-                        <option value="sleeping">😴 Sleeping</option>
-                        <option value="dead">💀 Dead</option>
+                        <option value="neutral">😐 NEUTRAL (IDLE)</option>
+                        <option value="wandering">🏃 WANDERING</option>
+                        <option value="happy">✨ HAPPY</option>
+                        <option value="sad">😢 SAD</option>
+                        <option value="hungry">🤤 HUNGRY</option>
+                        <option value="tired">😫 TIRED</option>
+                        <option value="sleeping">😴 SLEEPING</option>
+                        <option value="dead">💀 DEAD</option>
                     </select>
-                    <div class="color-palette">
-                        <div class="color-swatch active" style="background:#000000" onclick="setPaintColor('#000000', this)"></div>
-                        <div class="color-swatch" style="background:#ff7675" onclick="setPaintColor('#ff7675', this)"></div>
-                        <div class="color-swatch" style="background:#74b9ff" onclick="setPaintColor('#74b9ff', this)"></div>
-                        <div class="color-swatch" style="background:#55efc4" onclick="setPaintColor('#55efc4', this)"></div>
-                        <div class="color-swatch" style="background:#ffeaa7" onclick="setPaintColor('#ffeaa7', this)"></div>
-                        <div class="color-swatch" style="background:#ffffff" onclick="setPaintColor('#ffffff', this)"></div>
-                        <div class="color-swatch transparent" style="background:transparent" onclick="setPaintColor('transparent', this)">❌</div>
+                    <div class="palette-grid">
+                        <div class="swatch active" style="background:#000000" onclick="setPaintColor('#000000', this)"></div>
+                        <div class="swatch" style="background:#ff4757" onclick="setPaintColor('#ff4757', this)"></div>
+                        <div class="swatch" style="background:#2ed573" onclick="setPaintColor('#2ed573', this)"></div>
+                        <div class="swatch" style="background:#1e90ff" onclick="setPaintColor('#1e90ff', this)"></div>
+                        <div class="swatch" style="background:#ffa502" onclick="setPaintColor('#ffa502', this)"></div>
+                        <div class="swatch" style="background:#ffffff" onclick="setPaintColor('#ffffff', this)"></div>
+                        <div class="swatch clear-tool" style="background:transparent" onclick="setPaintColor('transparent', this)">❌</div>
                     </div>
-                    <button onclick="usePremadeSet()" style="background:#e67e22">Load Premade Emojis</button>
+                    <button class="preset-btn" onclick="usePremadeSet()">🔄 RELOAD FACTORY PIXELS</button>
                 </div>
-                <div id="pixel-canvas-grid" class="pixel-grid"></div>
+                <div id="pixel-canvas-grid" class="canvas-grid-container"></div>
             </div>
-            <button onclick="savePixelArtChanges()" class="save-btn">💾 Inject Custom Graphics</button>
-            <button onclick="closeModals()">Exit Canvas</button>
+            <button onclick="savePixelArtChanges()" class="commit-btn">💾 INJECT TEXTURES TO CANVAS</button>
+            <button class="modal-close" onclick="closeModals()">CLOSE GRAPHICS CANVAS</button>
         </div>
     </div>
 
-    <!-- Home Blueprint Decorator Modal -->
+    <!-- Room Blueprint Furniture Placement Editor -->
     <div id="modal-home" class="modal hidden">
-        <div class="modal-content">
-            <h3>🛋️ Virtual Sandbox Sandbox Blueprint</h3>
-            <p>Click a furniture item token below, then click inside your room viewport above to position it!</p>
-            <div class="furniture-palette">
-                <button onclick="selectFurnitureToken('🛏️')">🛏️ Retro Bed</button>
-                <button onclick="selectFurnitureToken('🪴')">🪴 Potted Fern</button>
-                <button onclick="selectFurnitureToken('📺')">📺 CRT Television</button>
-                <button onclick="selectFurnitureToken('🪑')">🪑 Cushion Chair</button>
-                <button onclick="selectFurnitureToken('🧱')">🧱 Room Divider Wall</button>
-                <button onclick="clearAllFurniture()" style="background:#c0392b">🧹 Clear Room Items</button>
+        <div class="modal-box">
+            <h3>🛋️ BLUEPRINT FURNITURE STACKER</h3>
+            <p style="font-size:0.8rem; color:#8a8d9a;">Select an asset. Then tap on the console main screen matrix to deploy it!</p>
+            <div class="furniture-catalog">
+                <button onclick="selectFurnitureToken('bed')">🛏️ PIXEL BED</button>
+                <button onclick="selectFurnitureToken('plant')">🪴 POT FERN</button>
+                <button onclick="selectFurnitureToken('tv')">📺 CRT SCREEN</button>
+                <button onclick="selectFurnitureToken('chair')">🪑 DECK CHAIR</button>
+                <button onclick="clearAllFurniture()" style="background:#ff4757;">🧹 WIPE ROOM ITEMS</button>
             </div>
-            <button onclick="closeModals()" style="margin-top:15px; width:100%;">Finish Decorating</button>
+            <button class="modal-close" onclick="closeModals()" style="margin-top:15px; width:100%;">APPLY FURNITURE COORD LAYERS</button>
         </div>
     </div>
 
-    <!-- Workspace Minigames Modal -->
+    <!-- Workspace Mini Task Terminal -->
     <div id="modal-minigame" class="modal hidden">
-        <div class="modal-content medium">
-            <h3 id="minigame-title">💼 Minigame Task Window</h3>
-            <div id="minigame-playground" class="game-surface"></div>
-            <p id="minigame-feedback"></p>
-            <button onclick="closeModals()" id="btn-close-game" style="display:none">Return to Room</button>
+        <div class="modal-box medium">
+            <h3 id="minigame-title">💼 WORKSTATION MINI-SHELL</h3>
+            <div id="minigame-playground" class="arcade-viewport"></div>
+            <p id="minigame-feedback" style="font-size:0.85rem; background:#0f0f15; padding:8px; border-radius:4px; min-height:30px;"></p>
+            <button onclick="closeModals()" id="btn-close-game" style="display:none; width:100%;" class="commit-btn">COLLECT PAYROLL & RETURN</button>
         </div>
     </div>
 

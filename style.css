@@ -1,156 +1,158 @@
 @import url('https://googleapis.com');
 
 :root {
-    --sys-dark: #121216;
-    --sys-panel: #1e1e26;
-    --sys-border: #3b3b4f;
-    --neon-blue: #00d2d3;
-    --neon-pink: #ff9ff3;
+    --shell-color: #2c3e50;
+    --bezel-color: #7f8c8d;
+    --lcd-bg: #8d99ae;
+    --lcd-text: #1d2d44;
+    --neon-green: #32ff7e;
 }
 
 body {
-    background-color: var(--sys-dark);
-    color: #e0e0e8;
+    background-color: #11141a;
+    color: #f1f2f6;
     font-family: 'Courier Prime', monospace;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    overflow-x: hidden;
-}
-
-.desktop-wrapper { padding: 10px; }
-
-.monitor-frame {
-    background-color: var(--sys-panel);
-    border: 4px solid var(--sys-border);
-    border-radius: 12px;
-    width: 440px;
-    padding: 20px;
-    box-shadow: 0 16px 40px rgba(0,0,0,0.6);
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px dashed var(--sys-border);
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-}
-
-header h1 { font-size: 1.1rem; margin: 0; color: var(--neon-blue); }
-
-.top-bar-stats { font-weight: bold; font-size: 1rem; }
-
-/* The Dynamic Room Simulation Space */
-.room-viewport {
-    background: #181820;
-    border: 2px solid #000;
-    height: 240px;
-    border-radius: 6px;
-    position: relative;
-    overflow: hidden;
-    background-image: radial-gradient(#252535 1px, transparent 1px);
-    background-size: 16px 16px;
-}
-
-/* Furniture Placed Tokens inside Sandbox */
-.furniture-token {
-    position: absolute;
-    font-size: 1.8rem;
-    transform: translate(-50%, -50%);
-    cursor: pointer;
     user-select: none;
-    z-index: 10;
 }
 
-/* The Animated Pet */
-.pixel-pet-sprite {
-    position: absolute;
-    width: 48px;
-    height: 48px;
-    left: 200px;
-    top: 120px;
-    transform: translate(-50%, -50%);
+/* Handheld Console Device Chassis */
+.handheld-console {
+    background: linear-gradient(135deg, #34495e, #2c3e50);
+    border: 6px solid #1a252f;
+    border-radius: 28px;
+    padding: 24px;
+    width: 420px;
+    box-shadow: inset 0 4px 6px rgba(255,255,255,0.2), 0 20px 50px rgba(0,0,0,0.8);
+}
+
+/* Screen Housing Bezel Frame */
+.screen-bevel {
+    background-color: #1e272e;
+    border-radius: 12px;
+    padding: 14px;
+    border: 4px solid #10171d;
+    box-shadow: inset 0 5px 15px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
+}
+
+/* LCD Header Status Matrix Bar */
+.lcd-header {
+    background-color: var(--lcd-bg);
+    color: var(--lcd-text);
+    padding: 6px 12px;
+    border-radius: 4px 4px 0 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 20;
-    transition: left 0.8s linear, top 0.8s linear;
-}
-
-/* Fallback/Custom CSS Grid Generator Renders */
-.pixel-render-canvas {
-    display: grid;
-    grid-template-columns: repeat(16, 1fr);
-    width: 48px;
-    height: 48px;
-}
-.pixel-cell-dot { width: 3px; height: 3px; }
-
-.vitals-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 8px;
-    margin: 15px 0;
-}
-
-.vital-node {
-    display: flex;
-    align-items: center;
     justify-content: space-between;
-    font-size: 0.85rem;
+    align-items: center;
+    font-size: 0.9rem;
+    border-bottom: 2px solid #57606f;
 }
 
-.bar-outer {
-    background: #2d2d3a;
-    width: 70%;
-    height: 12px;
-    border-radius: 4px;
+.lcd-led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--neon-green);
+    box-shadow: 0 0 8px var(--neon-green);
+    transition: background 0.3s;
+}
+.lcd-led.alert { background-color: #ff4757; box-shadow: 0 0 8px #ff4757; }
+.lcd-led.off { background-color: #4b4b4b; box-shadow: none; }
+
+/* The HTML Canvas Viewport Rendering Target */
+.pixel-screen {
+    background-color: #22252a;
+    display: block;
+    width: 100%;
+    height: 220px;
+    image-rendering: pixelated;
+    border-left: 2px solid #111;
+    border-right: 2px solid #111;
+}
+
+/* Hardware Hardware Gauges Layer */
+.gauge-cluster {
+    background-color: var(--lcd-bg);
+    padding: 10px;
+    border-radius: 0 0 4px 4px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    border-top: 2px solid #57606f;
+}
+
+.gauge-node {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.75rem;
+    color: var(--lcd-text);
+}
+
+.g-track {
+    background-color: #2f3542;
+    height: 8px;
+    border-radius: 2px;
     overflow: hidden;
+    margin-top: 3px;
     border: 1px solid #111;
 }
 
-.bar-inner { height: 100%; width: 100%; transition: width 0.3s ease; }
-.food { background: #ff4757; }
-.energy { background: #ffa502; }
-.happy { background: #2ed573; }
+.g-fill { height: 100%; width: 100%; transition: width 0.4s ease; }
+.g-fill.food { background-color: #ff4d4d; }
+.g-fill.energy { background-color: #ffaf40; }
+.g-fill.happy { background-color: #32ff7e; }
 
-.action-deck {
+/* Primary Arcade Control Grid Setup */
+.dpad-action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.c-btn {
+    background: #ecf0f1;
+    border: none;
+    border-bottom: 4px solid #bdc3c7;
+    color: #2c3e50;
+    padding: 12px;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.05s, background 0.2s;
+}
+.c-btn:hover { background: #fff; }
+.c-btn:active { transform: translateY(3px); border-bottom-width: 1px; }
+.c-btn.highlight { background: #ff9f43; color: #fff; border-color: #d35400; }
+.c-btn.highlight:hover { background: #ffb142; }
+
+.cartridge-io-deck {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-top: 15px;
+    border-top: 2px dashed #34495e;
+    padding-top: 15px;
 }
-
-.io-deck {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 10px;
-    border-top: 1px solid var(--sys-border);
-    padding-top: 10px;
-}
-
-button {
-    background: #2f3542;
-    border: 2px solid var(--sys-border);
-    color: #fff;
-    padding: 10px;
+.io-btn {
+    background: #16a085;
+    color: white;
+    border: none;
+    border-bottom: 3px solid #117a65;
     font-family: inherit;
-    font-weight: bold;
+    font-size: 0.75rem;
+    padding: 8px;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 4px;
 }
 
-button:hover { background: #57606f; border-color: var(--neon-blue); }
-button:active { transform: scale(0.98); }
-
-.btn-io { background: #1e272e; color: #ced6e0; font-size: 0.8rem; }
-
-/* MODALS LAYOUTS */
+/* RE-ENGINEERED OVERLAY MODALS */
 .modal {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
@@ -160,58 +162,72 @@ button:active { transform: scale(0.98); }
     align-items: center;
     z-index: 100;
 }
-
 .modal.hidden { display: none !important; }
 
-.modal-content {
-    background: var(--sys-panel);
-    border: 3px solid var(--neon-blue);
-    padding: 25px;
+.modal-box {
+    background: #2c3e50;
+    border: 4px solid #ecf0f1;
+    padding: 20px;
     border-radius: 12px;
-    width: 340px;
-    max-width: 90%;
+    width: 350px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
-.modal-content.medium { width: 400px; }
-.modal-content.large { width: 550px; }
+.modal-box.large { width: 560px; }
+.modal-box.medium { width: 400px; }
 
-.slider-row { margin: 15px 0; }
+.slider-row { margin: 16px 0; }
 .slider-row input { width: 100%; }
 
-/* Pixel Sheet Design Layout Matrix */
-.editor-layout { display: flex; gap: 20px; margin: 15px 0; }
-.state-selector-panel { flex: 1; display: flex; flex-direction: column; gap: 10px; }
-.state-selector-panel select { padding: 8px; font-family: inherit; background: #000; color: #fff; border: 1px solid var(--sys-border); }
+.modal-close, .commit-btn, .preset-btn {
+    width: 100%;
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-bottom: 3px solid #c0392b;
+    padding: 10px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+.commit-btn { background: #2ecc71; border-color: #27ae60; }
+.preset-btn { background: #9b59b6; border-color: #8e44ad; }
 
-.color-palette { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.color-swatch {
-    width: 32px; height: 32px; border-radius: 4px; cursor: pointer; border: 2px solid transparent;
+/* 16x16 Paint Engine Layout Controls */
+.editor-workspace { display: flex; gap: 16px; margin: 15px 0; }
+.editor-sidebar { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.editor-sidebar select { background: #111; color: #fff; padding: 6px; border: 1px solid #444; font-family: inherit; }
+
+.palette-grid { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+.swatch {
+    width: 28px; height: 28px; border-radius: 4px; cursor: pointer; border: 2px solid transparent;
     display: flex; justify-content: center; align-items: center; font-size: 0.7rem;
 }
-.color-swatch.active { border-color: #fff; box-shadow: 0 0 8px var(--neon-blue); }
-.color-swatch.transparent { border: 1px dashed #ff4757; color: #ff4757; }
+.swatch.active { border-color: #fff; box-shadow: 0 0 6px #fff; }
+.swatch.clear-tool { border: 1px dashed #ff4757; color: #ff4757; }
 
-.pixel-grid {
+.canvas-grid-container {
     display: grid;
     grid-template-columns: repeat(16, 1fr);
     grid-template-rows: repeat(16, 1fr);
     gap: 1px;
-    background: #444;
-    width: 280px;
-    height: 280px;
+    background: #111;
+    width: 256px;
+    height: 256px;
     border: 2px solid #000;
 }
-.pixel-canvas-cell { background: transparent; cursor: pointer; }
-.pixel-canvas-cell:hover { filter: brightness(1.3); background: #555; }
+.p-cell { background-color: transparent; cursor: pointer; }
+.p-cell:hover { background-color: #444; }
 
-.furniture-palette { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.furniture-catalog button {
+    display: block; width: 100%; margin: 6px 0; padding: 10px;
+    background: #34495e; color: #fff; border: 1px solid #555; text-align: left;
+    font-family: inherit; cursor: pointer; border-radius: 4px;
+}
+.furniture-catalog button:hover { background: #4e6a85; }
 
-/* Minigame Interactive Board styling */
-.game-surface {
-    background: #000;
-    height: 180px;
-    border: 2px solid var(--sys-border);
-    border-radius: 6px;
-    position: relative;
-    margin: 15px 0;
-    overflow: hidden;
+.arcade-viewport {
+    background: #000; height: 160px; border: 2px solid #111;
+    position: relative; overflow: hidden; margin-bottom: 12px; border-radius: 4px;
 }

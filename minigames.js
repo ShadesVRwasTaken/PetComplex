@@ -3,19 +3,19 @@ let gameTargetValue = 0;
 let gameCurrentValue = 0;
 
 const minigameLibrary = [
-    { title: "🍽️ Task: Dish Scrubber", desc: "Mash the blue button 12 times to clean the grease!", actionLabel: "🧽 Scrub!", target: 12 },
-    { title: "📦 Task: Box Stacker", desc: "Click exactly when the timing slider hits max density (>85)!", actionLabel: "🏗️ Drop Box!", target: 85 },
-    { title: "🧹 Task: Floor Sweeper", desc: "Click the runaway dust bunnies before they vanish!", actionLabel: "💨 Catch Dust!", target: 1 },
-    { title: "📄 Task: Data Entry Clerking", desc: "Type the matching system generation access key number sequence code!", actionLabel: "⌨️ Verify Number!", target: 0 },
-    { title: "☕ Task: Coffee Brewer", desc: "Hold down button to fill beaker precisely to the target line!", actionLabel: "☕ Pour Espresso!", target: 70 }
+    { title: "🍽️ TASK: CLEAN DISHES", desc: "Rapidly press the scrub key to wash the plate clean!", actionLabel: "🧽 SCRUB DISH", target: 10 },
+    { title: "📦 TASK: LOADING DOCK", desc: "Stop the high-speed loading crane directly inside the sweet spot (>85)!", actionLabel: "🏗️ DROP PALLET", target: 85 },
+    { title: "🧹 TASK: SWEEP FLOORS", desc: "Catch the moving pixelated dust speck on screen before it moves!", actionLabel: "🧹 SWEEP NODE", target: 1 },
+    { title: "📄 TASK: DATA ENTRY", desc: "Type the matching encrypted mainframe string code sequence exactly!", actionLabel: "⌨️ TRANSMIT BATCH", target: 0 },
+    { title: "☕ TASK: ESPRESSO BAR", desc: "Hold down action button to fill beaker precisely to the target line!", actionLabel: "☕ POUR STEAM", target: 72 }
 ];
 
 function openMinigameSelector() {
     if (pet.isSleeping || pet.energy < 15) {
-        alert("Your pet is too tired or resting to work right now!");
+        alert("Your pet is resting or lacks the energy resources to start work!");
         return;
     }
-    initAudioEngine();
+    initAudioContext();
     openModal('modal-minigame');
     activeGameIndex = Math.floor(Math.random() * minigameLibrary.length);
     setupMinigameInstance();
@@ -29,137 +29,98 @@ function setupMinigameInstance() {
 
     const surface = document.getElementById('minigame-playground');
     surface.innerHTML = '';
-
     gameCurrentValue = 0;
     gameTargetValue = config.target;
 
-    // Interface generation mechanics engine based on the active dynamic game index
     if(activeGameIndex === 0) {
-        // Dish Scrubber
         const btn = document.createElement('button');
-        btn.innerText = config.actionLabel;
-        btn.style.margin = "60px auto";
-        btn.style.display = "block";
+        btn.className = "commit-btn"; btn.innerText = config.actionLabel;
+        btn.style.margin = "40px auto"; display="block"; width="60%";
         btn.onclick = () => {
             gameCurrentValue++;
             playCuteSFX('bounce');
-            document.getElementById('minigame-feedback').innerText = `Scrub progress: ${gameCurrentValue}/${gameTargetValue}`;
+            document.getElementById('minigame-feedback').innerText = `Scrub Velocity: ${gameCurrentValue}/${gameTargetValue}`;
             if(gameCurrentValue >= gameTargetValue) winMinigamePayout();
         };
         surface.appendChild(btn);
     } 
     else if(activeGameIndex === 1) {
-        // Box Stacker slider timing system
         const slider = document.createElement('input');
         slider.type = 'range'; slider.min = 0; slider.max = 100; slider.value = 10;
-        slider.style.width = "80%"; slider.style.margin = "40px 10%";
-        slider.id = "stacker-slider";
+        slider.style.width = "80%"; slider.style.margin = "40px 10%"; slider.id = "stacker-slider";
         surface.appendChild(slider);
 
-        let dynamicDir = 4;
-        const loopInt = setInterval(() => {
-            if(!document.getElementById('stacker-slider')) { clearInterval(loopInt); return; }
+        let velocity = 5;
+        const loop = setInterval(() => {
+            if(!document.getElementById('stacker-slider')) { clearInterval(loop); return; }
             let val = parseInt(slider.value);
-            if(val >= 100 || val <= 0) dynamicDir *= -1;
-            slider.value = val + dynamicDir;
-        }, 30);
+            if(val >= 100 || val <= 0) velocity *= -1;
+            slider.value = val + velocity;
+        }, 25);
 
         const btn = document.createElement('button');
-        btn.innerText = config.actionLabel;
-        btn.style.margin = "10px auto"; btn.style.display = "block";
+        btn.className = "commit-btn"; btn.innerText = config.actionLabel;
+        btn.style.margin = "0 auto"; display="block";
         btn.onclick = () => {
-            let finalVal = parseInt(slider.value);
-            if(finalVal >= gameTargetValue) {
-                clearInterval(loopInt);
-                winMinigamePayout();
-            } else {
-                playCuteSFX('sad');
-                document.getElementById('minigame-feedback').innerText = `Missed! Slider timing score was [${finalVal}]. Try again!`;
-            }
+            let score = parseInt(slider.value);
+            if(score >= gameTargetValue) { clearInterval(loop); winMinigamePayout(); }
+            else { playCuteSFX('sad'); document.getElementById('minigame-feedback').innerText = `Missed Alignment! Calibration registered [${score}]. Try again.`; }
         };
         surface.appendChild(btn);
     }
     else if(activeGameIndex === 2) {
-        // Floor Sweeper target hunter node
-        const targetObj = document.createElement('div');
-        targetObj.innerText = "🏽"; targetObj.style.position = "absolute";
-        targetObj.style.fontSize = "2rem"; targetObj.style.cursor = "pointer";
-        targetObj.style.left = "40px"; targetObj.style.top = "40px";
-        
-        targetObj.onclick = () => {
-            winMinigamePayout();
-        };
-        
+        const block = document.createElement('div');
+        block.style.width = "20px"; block.style.height = "20px"; block.style.background = "#ff4757";
+        block.style.position = "absolute"; block.style.cursor = "pointer"; block.style.left = "30px"; block.style.top = "30px";
+        block.onclick = () => winMinigamePayout();
         setInterval(() => {
-            targetObj.style.left = `${Math.random() * 80}%`;
-            targetObj.style.top = `${Math.random() * 70}%`;
-        }, 900);
-        
-        surface.appendChild(targetObj);
+            block.style.left = `${Math.random() * 85}%`;
+            block.style.top = `${Math.random() * 75}%`;
+        }, 800);
+        surface.appendChild(block);
     }
     else if(activeGameIndex === 3) {
-        // Data Entry verification sequence text matcher engine logic
-        const targetPass = Math.floor(1000 + Math.random() * 9000);
-        gameTargetValue = targetPass;
-
-        const label = document.createElement('p');
-        label.innerText = `System Code Entry: ${targetPass}`;
-        label.style.textAlign = "center"; label.style.color = "#fff";
-        surface.appendChild(label);
+        const key = Math.floor(1000 + Math.random() * 9000);
+        gameTargetValue = key;
+        const lbl = document.createElement('div');
+        lbl.innerText = `MAINFRAME KEY: ${key}`; lbl.style.textAlign = "center"; lbl.style.marginTop = "20px";
+        surface.appendChild(lbl);
 
         const input = document.createElement('input');
-        input.type = "number"; input.placeholder = "Type entry key...";
-        input.style.display = "block"; input.style.margin = "10px auto";
-        input.id = "data-input-field";
+        input.type = "number"; input.style.display = "block"; input.style.margin = "10px auto"; input.id = "minigame-input";
         surface.appendChild(input);
 
         const btn = document.createElement('button');
-        btn.innerText = config.actionLabel;
-        btn.style.margin = "5px auto"; btn.style.display = "block";
+        btn.className = "commit-btn"; btn.innerText = config.actionLabel;
         btn.onclick = () => {
-            if(parseInt(input.value) === gameTargetValue) {
-                winMinigamePayout();
-            } else {
-                playCuteSFX('sad');
-                document.getElementById('minigame-feedback').innerText = "Incorrect sequence! Check matching verification strings.";
-            }
+            if(parseInt(input.value) === gameTargetValue) winMinigamePayout();
+            else { playCuteSFX('sad'); document.getElementById('minigame-feedback').innerText = "Encryption mismatch! Re-verify strings."; }
         };
         surface.appendChild(btn);
     }
     else if(activeGameIndex === 4) {
-        // Coffee Pour holding duration game
-        const fluidTank = document.createElement('div');
-        fluidTank.style.background = "#333"; fluidTank.style.width = "40px"; fluidTank.style.height = "100px";
-        fluidTank.style.margin = "10px auto"; fluidTank.style.position = "relative";
-        
-        const fluidFill = document.createElement('div');
-        fluidFill.style.background = "#70a1ff"; fluidFill.style.width = "100%"; fluidFill.style.height = "0%";
-        fluidFill.style.position = "absolute"; fluidFill.style.bottom = "0";
-        fluidTank.appendChild(fluidFill);
-        surface.appendChild(fluidTank);
+        const track = document.createElement('div');
+        track.style.background = "#222"; track.style.width = "30px"; track.style.height = "90px"; track.style.margin = "10px auto"; track.style.position = "relative";
+        const filler = document.createElement('div');
+        filler.style.background = "#ffa502"; filler.style.width = "100%"; filler.style.height = "0%"; filler.style.position = "absolute"; filler.style.bottom = "0";
+        track.appendChild(filler); surface.appendChild(track);
 
         const btn = document.createElement('button');
-        btn.innerText = config.actionLabel;
-        btn.style.margin = "5px auto"; btn.style.display = "block";
+        btn.className = "commit-btn"; btn.innerText = config.actionLabel;
+        btn.style.margin = "0 auto"; display="block";
         
-        let pourInterval;
+        let pourTimer;
         btn.onmousedown = () => {
-            pourInterval = setInterval(() => {
-                gameCurrentValue = Math.min(100, gameCurrentValue + 2);
-                fluidFill.style.height = `${gameCurrentValue}%`;
+            pourTimer = setInterval(() => {
+                gameCurrentValue = Math.min(100, gameCurrentValue + 3);
+                filler.style.height = `${gameCurrentValue}%`;
                 playCuteSFX('click');
-            }, 50);
+            }, 60);
         };
-        
         btn.onmouseup = () => {
-            clearInterval(pourInterval);
-            if(gameCurrentValue >= 65 && gameCurrentValue <= 80) {
-                winMinigamePayout();
-            } else {
-                playCuteSFX('sad');
-                document.getElementById('minigame-feedback').innerText = `Overflow/Underflow! Filled total to: [${gameCurrentValue}%]. Target was 70%`;
-                gameCurrentValue = 0; fluidFill.style.height = "0%";
-            }
+            clearInterval(pourTimer);
+            if(gameCurrentValue >= 65 && gameCurrentValue <= 80) winMinigamePayout();
+            else { playCuteSFX('sad'); document.getElementById('minigame-feedback').innerText = `Pressure unstable! Discharged to [${gameCurrentValue}%]. Target is 72%`; gameCurrentValue = 0; filler.style.height = "0%"; }
         };
         surface.appendChild(btn);
     }
@@ -170,10 +131,8 @@ function winMinigamePayout() {
     pet.money += 35;
     pet.energy = Math.max(0, pet.energy - 15);
     pet.happiness = Math.max(0, pet.happiness - 5);
-    
-    document.getElementById('minigame-feedback').innerText = "🎉 Task Completed successfully! Earned +\$35 cash payroll.";
-    document.getElementById('minigame-playground').innerHTML = "⚙️ JOB SLOT FREE";
+    document.getElementById('minigame-feedback').innerText = "🎉 JOB TASK RESOLVED! Payroll processing generated +\$35 cash assets.";
+    document.getElementById('minigame-playground').innerHTML = "";
     document.getElementById('btn-close-game').style.display = 'block';
-    
     updateGlobalUI();
 }
